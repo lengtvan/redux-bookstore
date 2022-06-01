@@ -1,61 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import api from "../apiService";
-import { Container, Button, Box, Grid, Stack, Typography } from "@mui/material";
 
+import { Container, Button, Box, Grid, Stack, Typography } from "@mui/material";
+import {
+  addToReadingList,
+  bookDetailSlice,
+  fetchBook,
+  postBook,
+} from "../service/sliceForBookDetail";
+import { useDispatch, useSelector } from "react-redux";
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
 const BookDetailPage = () => {
-  const [loading, setLoading] = useState(false);
-  const [book, setBook] = useState(null);
-  const [addingBook, setAddingBook] = useState(false);
   const params = useParams();
   const bookId = params.id;
 
-  const addToReadingList = (book) => {
-    setAddingBook(book);
-  };
+  const dispatch = useDispatch();
+  const book = useSelector((state) => state.bookDetail.book);
+  const loading = useSelector((state) => state.bookDetail.loading);
+  const addingBook = useSelector((state) => state.bookDetail.addingBook);
+  useEffect(() => {
+    if (!addingBook) return;
+    console.log("haha");
+    dispatch(postBook(addingBook));
+  }, [dispatch, addingBook]);
 
   useEffect(() => {
-    const postData = async () => {
-      if (!addingBook) return;
-      setLoading(true);
-      try {
-        await api.post(`/favorites`, addingBook);
-        toast.success("The book has been added to the reading list!");
-      } catch (error) {
-        toast.error(error.message);
-      }
-      setLoading(false);
-    };
-    postData();
-  }, [addingBook]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const res = await api.get(`/books/${bookId}`);
-        setBook(res.data);
-      } catch (error) {
-        toast.error(error.message);
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, [bookId]);
+    console.log("hihi");
+    dispatch(fetchBook(bookId));
+  }, [dispatch]);
 
   return (
     <Container>
       {loading ? (
-        <Box sx={{ textAlign: "center", color: "primary.main" }} >
+        <Box sx={{ textAlign: "center", color: "primary.main" }}>
           <ClipLoader color="#inherit" size={150} loading={true} />
         </Box>
       ) : (
-        <Grid container spacing={2} p={4} mt={5} sx={{ border: "1px solid black" }}>
+        <Grid
+          container
+          spacing={2}
+          p={4}
+          mt={5}
+          sx={{ border: "1px solid black" }}
+        >
           <Grid item md={4}>
             {book && (
               <img
@@ -84,16 +74,19 @@ const BookDetailPage = () => {
                 <Typography variant="body1">
                   <strong>Language:</strong> {book.language}
                 </Typography>
-                <Button variant="outlined" sx={{ width: "fit-content" }} onClick={() => addToReadingList(book)}>
+                <Button
+                  variant="outlined"
+                  sx={{ width: "fit-content" }}
+                  onClick={() => dispatch(addToReadingList(book))}
+                >
                   Add to Reading List
                 </Button>
               </Stack>
             )}
           </Grid>
         </Grid>
-      )
-      }
-    </Container >
+      )}
+    </Container>
   );
 };
 
