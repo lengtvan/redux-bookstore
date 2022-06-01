@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router-dom";
 import api from "../apiService";
 
 export const fetchBooks = createAsyncThunk("fetchBooks", async (url) => {

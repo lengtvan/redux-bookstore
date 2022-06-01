@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import api from "../apiService";
-import { useSelector } from "react-redux";
 
 export const postBook = createAsyncThunk("postBook", async (addingBook) => {
   await api.post(`/favorites`, addingBook);

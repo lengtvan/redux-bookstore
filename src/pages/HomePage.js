@@ -16,12 +16,7 @@ import {
   CardContent,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchBooks,
-  HandleClickBook,
-  setPageNum,
-  setQuery,
-} from "../service/sliceForBooks";
+import { fetchBooks, setPageNum, setQuery } from "../service/sliceForBooks";
 import { useNavigate } from "react-router-dom";
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;

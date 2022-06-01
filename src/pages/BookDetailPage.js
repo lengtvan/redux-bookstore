@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import { Container, Button, Box, Grid, Stack, Typography } from "@mui/material";
 import {
   addToReadingList,
-  bookDetailSlice,
   fetchBook,
   postBook,
 } from "../service/sliceForBookDetail";
@@ -30,7 +29,7 @@ const BookDetailPage = () => {
   useEffect(() => {
     console.log("hihi");
     dispatch(fetchBook(bookId));
-  }, [dispatch]);
+  }, [dispatch, bookId]);
 
   return (
     <Container>
